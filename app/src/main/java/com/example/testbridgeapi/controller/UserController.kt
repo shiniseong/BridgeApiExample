@@ -73,4 +73,12 @@ class UserController(private val userService: UserService) {
         userService.testExceptionGeneral()
         return ApiCommonResponse(status = 0, message = "success", data = Unit)
     }
+
+    @Get("test/time-out")
+    fun testTimeOut(): ApiCommonResponse<Unit> {
+        for (i in 1..10000) {
+            println("testTimeOut: $i")
+        }
+        return ApiCommonResponse(status = 0, message = "success", data = Unit)
+    }
 }

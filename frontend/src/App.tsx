@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import './App.css'
 import {BridgeApi} from 'bridge-api-client-ts'
 
@@ -53,29 +53,71 @@ function App() {
         } finally {
             setLoading(false);
         }
-    };
+    }
 
-    const handleGetUser = () => handleApiCall(() => BridgeApi.get<ApiCommonResponse<User>>(`/api/v1/users/${userId}`));
+    const customBridgeApi = BridgeApi.create({
+        headers: {"Authorization": "Test Bearer token"},
+        responseErrorHandler: (e: any) => {
+            console.error(e)
+            return Promise.reject(e);
+        },
+        timeout: 1,
+    })
 
-    const handleCreateUser = () => handleApiCall(() => BridgeApi.post<ApiCommonResponse<User>>('/api/v1/users', {
+    const handleGetUser = () => handleApiCall(() => customBridgeApi.get<ApiCommonResponse<User>>(`/api/v1/users/${userId}`));
+
+    const handleCreateUser = () => handleApiCall(() => customBridgeApi.post<ApiCommonResponse<User>>('/api/v1/users', {
         name: userName,
         age: parseInt(userAge),
         type: userType
     }));
 
-    const handleUpdateUserType = () => handleApiCall(() => BridgeApi.patch<ApiCommonResponse<User>>(`/api/v1/users/${userId}/user-type`, {
+    const handleUpdateUserType = () => handleApiCall(() => customBridgeApi.patch<ApiCommonResponse<User>>(`/api/v1/users/${userId}/user-type`, {
         name: userName,
         age: parseInt(userAge),
         type: userType
     }));
 
-    const handleDeleteUser = () => handleApiCall(() => BridgeApi.delete<ApiCommonResponse<null>>(`/api/v1/users/${userId}`));
+    const handleDeleteUser = () => handleApiCall(() => customBridgeApi.delete<ApiCommonResponse<null>>(`/api/v1/users/${userId}`));
 
-    const handleGetAllUsers = () => handleApiCall(() => BridgeApi.get<ApiCommonResponse<User[]>>('/api/v1/users/all?order=ASC'));
+    const handleGetAllUsers = () => handleApiCall(() => customBridgeApi.get<ApiCommonResponse<User[]>>('/api/v1/users/all?order=ASC'));
 
-    const handleTestServiceException = () => handleApiCall(() => BridgeApi.get<ApiCommonResponse<ErrorData>>('/api/v1/users/test/exception/service'));
+    const handleTestServiceException = () => handleApiCall(() => customBridgeApi.get<ApiCommonResponse<ErrorData>>('/api/v1/users/test/exception/service'));
 
-    const handleTestGeneralException = () => handleApiCall(() => BridgeApi.get<ApiCommonResponse<ErrorData>>('/api/v1/users/test/exception/general'));
+    const handleTestGeneralException = () => {
+
+        customBridgeApi.get<ApiCommonResponse<ErrorData>>('/api/v1/users/test/exception/general')
+            .then(res => setResult(JSON.stringify(res, null, 2)))
+    }
+
+    const handleTestTimeout = async () => {
+        setLoading(true); // 로딩 상태를 true로 설정
+        await customBridgeApi.get<ApiCommonResponse<any>>('/api/v1/users/test/time-out')
+            .then(res => {
+
+                setResult(JSON.stringify(res, null, 2));
+                setLoading(false);
+            })
+            .catch((e: any) => console.error(e))
+            .finally(() => setLoading(false));
+
+
+    }
+
+    const handleTestSleep = () => {
+        setLoading(true)
+        const a = window.SleepApi.sleep()
+        setResult(a)
+        setLoading(false)
+        // new Promise((resolve, _ ) => {
+        //     resolve(window.SleepApi.sleep())
+        // })
+        //     .then((res: any) => setResult(JSON.stringify(res, null, 2)))
+        //     .catch((e: any) => console.error(e))
+        //     .finally(() => setLoading(false))
+
+
+    }
 
     return (
         <div className="app">
@@ -116,6 +158,8 @@ function App() {
                 <button onClick={handleGetAllUsers} disabled={loading}>Get All Users</button>
                 <button onClick={handleTestServiceException} disabled={loading}>Test Service Exception</button>
                 <button onClick={handleTestGeneralException} disabled={loading}>Test General Exception</button>
+                <button onClick={handleTestTimeout} disabled={loading}>Test Timeout</button>
+                <button onClick={handleTestSleep} disabled={loading}>Test Sleep</button>
             </div>
             <div className="result-section">
                 <h2>Result:</h2>
