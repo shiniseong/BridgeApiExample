@@ -742,10 +742,10 @@ braces@^3.0.3:
   dependencies:
     fill-range "^7.1.1"
 
-bridge-api-client-ts@^0.0.18:
-  version "0.0.18"
-  resolved "https://registry.yarnpkg.com/bridge-api-client-ts/-/bridge-api-client-ts-0.0.18.tgz#09991d157019bba89d5b0435d814fbd9eba73024"
-  integrity sha512-brSJpshrGWwjy6QXMKC0E3BubelnodaJFHX3VyissJi3dbubZo+UB0EygNRFAvHnMNnq9mUaqZiMx6VJrVdTQA==
+bridge-api-client-ts@^0.0.19:
+  version "0.0.19"
+  resolved "https://registry.yarnpkg.com/bridge-api-client-ts/-/bridge-api-client-ts-0.0.19.tgz#1a68bddac4ea3b25659b88f9442284b3f492d5d9"
+  integrity sha512-jByvs0JK2FGzBmJv+ZpC5YPOg7JQtnuPRIUrO00FIGz10UcqIYLxEYZU26jLXLgbrn3DX7Ccmh1/M9G9DHYowA==
 
 browserslist@^4.22.2:
   version "4.23.1"

@@ -61,7 +61,7 @@ function App() {
             console.error(e)
             return Promise.reject(e);
         },
-        timeout: 1,
+        timeout: 100,
     })
 
     const handleGetUser = () => handleApiCall(() => customBridgeApi.get<ApiCommonResponse<User>>(`/api/v1/users/${userId}`));
@@ -98,26 +98,16 @@ function App() {
                 setResult(JSON.stringify(res, null, 2));
                 setLoading(false);
             })
-            .catch((e: any) => console.error(e))
+            .catch((e: any) => {
+                    console.error("!@!@!", e)
+                    setResult(`Error: ${(e as Error).message}`)
+                }
+            )
             .finally(() => setLoading(false));
 
 
     }
 
-    const handleTestSleep = () => {
-        setLoading(true)
-        const a = window.SleepApi.sleep()
-        setResult(a)
-        setLoading(false)
-        // new Promise((resolve, _ ) => {
-        //     resolve(window.SleepApi.sleep())
-        // })
-        //     .then((res: any) => setResult(JSON.stringify(res, null, 2)))
-        //     .catch((e: any) => console.error(e))
-        //     .finally(() => setLoading(false))
-
-
-    }
 
     return (
         <div className="app">
@@ -159,7 +149,6 @@ function App() {
                 <button onClick={handleTestServiceException} disabled={loading}>Test Service Exception</button>
                 <button onClick={handleTestGeneralException} disabled={loading}>Test General Exception</button>
                 <button onClick={handleTestTimeout} disabled={loading}>Test Timeout</button>
-                <button onClick={handleTestSleep} disabled={loading}>Test Sleep</button>
             </div>
             <div className="result-section">
                 <h2>Result:</h2>

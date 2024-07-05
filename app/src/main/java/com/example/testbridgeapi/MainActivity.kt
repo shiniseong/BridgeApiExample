@@ -15,11 +15,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.testbridgeapi.controller.router
+import com.example.testbridgeapi.controller.serializer.serializeToJson
 import com.example.testbridgeapi.ui.theme.TestBridgeApiTheme
-import kotlinx.coroutines.*
-import java.util.concurrent.Executors
-import kotlin.concurrent.thread
-import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.imtsoft.bridgeApi.util.generateRejectScript
+import org.imtsoft.bridgeApi.util.generateResolveScript
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,39 +37,30 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-class BridgeApi(private val webView: WebView) {
-    private val executor = Executors.newSingleThreadExecutor()
+private fun WebView.resolveAsyncPromise(promiseId: String, responseJsonString: String) {
+    post { evaluateJavascript(generateResolveScript(promiseId, responseJsonString), null) }
+}
 
+private fun WebView.rejectAsyncPromise(promiseId: String, errorJsonString: String) {
+    post { evaluateJavascript(generateRejectScript(promiseId, errorJsonString), null) }
+}
+
+class BridgeApi(private val webView: WebView) {
     @JavascriptInterface
     fun bridgeRequest(promiseId: String, apiCommonRequestJsonString: String) {
-        executor.execute {
-            CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Default).launch {
+            try {
                 Log.d("BridgeApi", "bridgeRequest: $apiCommonRequestJsonString")
                 val result = router.bridgeRequest(apiCommonRequestJsonString)
                 Log.d("BridgeApi", "bridgeRequest result: $result")
-                resolveAsyncPromise(promiseId, result)
+                webView.resolveAsyncPromise(promiseId, result)
+            } catch (e: Exception) {
+                Log.e("BridgeApi", "bridgeRequest error: ${e.message}", e)
+                webView.rejectAsyncPromise(promiseId, e.serializeToJson())
             }
         }
     }
-
-    private fun resolveAsyncPromise(callbackId: String, responseJsonString: String) {
-        webView.post {
-            webView.evaluateJavascript("resolveAsyncPromise('$callbackId', '$responseJsonString')", null)
-        }
-    }
 }
-
-class SleepApi {
-    @JavascriptInterface
-    suspend fun sleep(): String {
-        Log.d("SleepApi", "sleep")
-        return withContext(Dispatchers.Main) {
-            delay(10)
-            "sleep"
-        }
-    }
-}
-
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
@@ -84,9 +77,7 @@ fun WebViewScreen() {
                 settings.setSupportZoom(true)
                 loadUrl(mUrl)
                 val bridgeApi = BridgeApi(this)
-                val sleepApi = SleepApi()
                 addJavascriptInterface(bridgeApi, "BridgeApi")
-                addJavascriptInterface(sleepApi, "SleepApi")
             }
         },
         update = {

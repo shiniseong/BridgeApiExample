@@ -76,9 +76,13 @@ class UserController(private val userService: UserService) {
 
     @Get("test/time-out")
     fun testTimeOut(): ApiCommonResponse<Unit> {
+        // time measurement
+        val start = System.currentTimeMillis()
         for (i in 1..10000) {
-            println("testTimeOut: $i")
+            println(i)
         }
+        val end = System.currentTimeMillis()
+        println("time: ${end - start}")
         return ApiCommonResponse(status = 0, message = "success", data = Unit)
     }
 }
