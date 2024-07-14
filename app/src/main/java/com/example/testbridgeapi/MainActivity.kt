@@ -65,7 +65,7 @@ class BridgeApi(private val webView: WebView) {
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun WebViewScreen() {
-    val mUrl = "http://192.168.10.138:5173/"
+    val mUrl = "http://192.168.219.100:5173/"
     AndroidView(
         factory = {
             WebView(it).apply {

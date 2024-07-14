@@ -5,7 +5,7 @@ import org.imtsoft.bridgeApi.type.RequestContext
 import org.imtsoft.bridgeApi.type.service.ServiceDecorator
 
 class LoggingTestInterceptor : ServiceDecorator() {
-    override fun serve(ctx: RequestContext): BridgeResponse {
+    override suspend fun serve(ctx: RequestContext): BridgeResponse {
         println("LoggingTestInterceptor: Before")
         val response = unwrap().serve(ctx)
         println("LoggingTestInterceptor: After")

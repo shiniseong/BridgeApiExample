@@ -6,7 +6,7 @@ import org.imtsoft.bridgeApi.type.service.ServiceDecorator
 
 
 class AuthTestInterceptor : ServiceDecorator() {
-    override fun serve(ctx: RequestContext): BridgeResponse {
+    override suspend fun serve(ctx: RequestContext): BridgeResponse {
         if (ctx.headers["Authorization"] != "Example Bearer token")
             println("AuthTestInterceptor: Unauthorized")
 
