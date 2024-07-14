@@ -8,7 +8,8 @@ import com.example.testbridgeapi.controller.interceptor.LoggingTestInterceptor
 import com.example.testbridgeapi.controller.serializer.objectMapper
 import com.example.testbridgeapi.core.service.UserService
 import com.example.testbridgeapi.repository.UserRepository
-import org.imtsoft.bridgeApi.BridgeRouter
+import io.github.shiniseong.bridgeApi.BridgeRouter
+
 
 val userRepository = UserRepository()
 val userService = UserService(userRepository)

@@ -11,6 +11,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url = uri("https://jitpack.io") }
+
         maven {
             name = "ImtSoft-Snapshots"
             setUrl("https://repo.imtsoft.me/nexus/content/repositories/snapshots")

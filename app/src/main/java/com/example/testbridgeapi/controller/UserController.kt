@@ -3,13 +3,9 @@ import com.example.testbridgeapi.controller.dto.res.UserResDto
 import com.example.testbridgeapi.controller.dto.res.toResDto
 import com.example.testbridgeapi.core.service.UserService
 import dto.res.ApiCommonResponse
-import org.imtsoft.bridgeApi.annotation.method.Delete
-import org.imtsoft.bridgeApi.annotation.method.Get
-import org.imtsoft.bridgeApi.annotation.method.Patch
-import org.imtsoft.bridgeApi.annotation.method.Post
-import org.imtsoft.bridgeApi.annotation.param.JsonBody
-import org.imtsoft.bridgeApi.annotation.param.PathVariable
-import org.imtsoft.bridgeApi.annotation.param.Query
+import io.github.shiniseong.bridgeApi.annotation.method.*
+import io.github.shiniseong.bridgeApi.annotation.param.*
+
 
 class UserController(private val userService: UserService) {
     @Get("/:id")

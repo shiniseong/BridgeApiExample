@@ -17,11 +17,12 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.example.testbridgeapi.controller.router
 import com.example.testbridgeapi.controller.serializer.serializeToJson
 import com.example.testbridgeapi.ui.theme.TestBridgeApiTheme
+import io.github.shiniseong.bridgeApi.util.generateRejectScript
+import io.github.shiniseong.bridgeApi.util.generateResolveScript
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.imtsoft.bridgeApi.util.generateRejectScript
-import org.imtsoft.bridgeApi.util.generateResolveScript
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

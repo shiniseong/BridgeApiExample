@@ -59,9 +59,11 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.webkit:webkit:1.11.0")
-    implementation("org.imtsoft.bridge-api:bridge-api:1.0.8")
-    implementation("ch.qos.logback:logback-core:1.3.14")
-    implementation("ch.qos.logback:logback-classic:1.3.14")
+//    implementation("org.imtsoft.bridge-api:bridge-api:1.0.8")
+    implementation("com.github.shiniseong:bridge-api:1.1.6")
+
+    implementation("com.jakewharton.timber:timber:5.0.1")
+
     implementation("com.fasterxml.jackson.core:jackson-core:2.17.1")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.1")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.1")

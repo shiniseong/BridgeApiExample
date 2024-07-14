@@ -1,8 +1,8 @@
 package com.example.testbridgeapi.controller.interceptor
 
-import org.imtsoft.bridgeApi.type.BridgeResponse
-import org.imtsoft.bridgeApi.type.RequestContext
-import org.imtsoft.bridgeApi.type.service.ServiceDecorator
+import io.github.shiniseong.bridgeApi.type.BridgeResponse
+import io.github.shiniseong.bridgeApi.type.RequestContext
+import io.github.shiniseong.bridgeApi.type.service.ServiceDecorator
 
 
 class AuthTestInterceptor : ServiceDecorator() {
